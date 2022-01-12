@@ -1,0 +1,857 @@
+<html>
+  <head>
+    <title>Online Milling Calculator</title>
+    <style>
+        body {
+          background: #fff;
+          color: #333;
+          font-family: Lato, sans-serif;
+        }
+        .container {
+          display: block;
+          width: auto;
+          margin: 10px 10px;
+          /*border-top: 2px solid #333;*/
+        }
+        .heading {
+          display: block;
+          width: auto;
+          margin: 10px 10px;
+          border-bottom: 2px solid #333;
+        }
+        .footer {
+          display: block;
+          width: auto;
+          margin: 10px 10px;
+          padding: 10px;
+          border-top: 2px solid #333;
+        }
+        ul {
+          margin: 0;
+          padding: 0;
+        }
+        li * {
+          /*float: left;*/
+        }
+        li, h3 {
+          clear:both;
+          list-style:none;
+          margin:10px;
+          /*text-align:right;*/
+        }
+        input {
+          margin: 0px;
+          margin-left: 10px;
+          margin-right: 10px;
+          width: 100px;
+        }
+        input#notes {
+          width: 300px;
+        }
+        input.output {
+          /*border: none;*/
+          background: #eeeeee;
+        }
+        h3 {
+          color: #333;
+          font-weight: 700;
+          font-size: 15px;
+          /*border-bottom: 2px solid #333;*/
+          padding: 30px 0 2px;
+          margin: 0;
+          text-transform: uppercase;
+        }
+        li {
+          overflow: hidden;
+          /*padding: 0px;*/
+          /*margin-top: 10px;*/
+          /*border-top: 1px solid #eee;*/
+        }
+        table td, table td * {
+            vertical-align: top;
+        }
+        select {
+          width: 200px;
+          padding: 5px 5px;
+          border: none;
+          border-radius: 4px;
+          background-color: #f1f1f1;
+          overflow-y: auto;
+        }
+        span.small {
+          color: #999;
+          font-size: smaller;
+        }
+    </style>
+  </head>
+  <body>
+      <div class="heading">
+          Online Milling Calculator
+      </div>
+    <table>
+    <tbody>
+    <tr>
+    <td>
+        <h3>Cut selection</h3>
+        <select id="select" size="10">
+            <option value="0">0:</option>
+            <option value="1">1:</option>
+            <option value="2">2:</option>
+            <option value="3">3:</option>
+            <option value="4">4:</option>
+            <option value="5">5:</option>
+            <option value="6">6:</option>
+            <option value="7">7:</option>
+            <option value="8">8:</option>
+            <option value="9">9:</option>
+        </select>
+    </td>
+    <td>
+      <ul id="inputs">
+          <li>Name<input id="notes" class="input" type="text" value="default"></li>
+          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="45000">psi</li>
+          <li>Tool Diameter<input id="td" class="input" type="number" value="0.25">in</li>
+          <li>Number of Teeth<input id="nt" class="input" type="number" value="2"></li>
+          <li>Helix Angle<input id="ha" class="input" type="number" value="30">deg</li>
+          <li>Stick Out<input id="so" class="input" type="number" value="1.25">in</li>
+          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600">Gpa</li>
+          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2"></li>
+          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75"></li>
+          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="0.05">in</li>
+          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="0.1">in</li>
+          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.001">in/tooth</li>
+          <li>Cutting Speed<input id="cs" class="input" type="number" value="1000">ft/min</li>
+      </ul>
+      <ul id="inputs_metric">
+          <li>Name<input id="notes" class="input" type="text" value="default"></li>
+          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="310">MPa</li>
+          <li>Tool Diameter<input id="td" class="input" type="number" value="6.25">mm</li>
+          <li>Number of Teeth<input id="nt" class="input" type="number" value="2"></li>
+          <li>Helix Angle<input id="ha" class="input" type="number" value="30">deg</li>
+          <li>Stick Out<input id="so" class="input" type="number" value="30">mm</li>
+          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600">Gpa</li>
+          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2"></li>
+          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75"></li>
+          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="1.2">mm</li>
+          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="2.5">mm</li>
+          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.025">mm/tooth</li>
+          <li>Cutting Speed<input id="cs" class="input" type="number" value="300">m/min</li>
+      </ul>
+      <div class="container">
+        <button id="file_import">Import</button>
+        <button id="file_export">Export</button>
+        <button id="units">Switch Units</button>
+      </div>
+    </td>
+    <td>
+      <ul id="outputs">
+          <li>RPM<input id="rpm" class="output" type="number" value="10000" readonly>r/min</li>
+          <li>Feed Rate<input id="fr" class="output" type="number" value="10000" readonly>in/min</li>
+          <li>Material Removal Rate<input id="mrr" class="output" type="number" value="0.15279" readonly>in^3/min</li>
+          <li>Chip Thickness<input id="ct" class="output" type="number" value="0.0008" readonly>in</li>
+          <li>Power at Tool<input id="pat" class="output" type="number" value="0.04591" readonly>HP</li>
+          <li>Power at Motor<input id="pam" class="output" type="number" value="0.04591" readonly>HP</li>
+          <li>Tangential Cutting Force<input id="tcf" class="output" type="number" value="1.51511" readonly>lbf</li>
+          <li>Average Tool Deflection<input id="td" class="output" type="number" value="0.00011" readonly>in</li>
+          <li>Peak Instantaneous Cutting Force<input id="picf" class="output" type="number" value="0.012" readonly>lbf</li>
+      </ul>
+      <ul id="outputs_metric">
+          <li>RPM<input id="rpm" class="output" type="number" value="10000" readonly>r/min</li>
+          <li>Feed Rate<input id="fr" class="output" type="number" value="10000" readonly>mm/min</li>
+          <li>Material Removal Rate<input id="mrr" class="output" type="number" value="0.15279" readonly>cm^3/min</li>
+          <li>Chip Thickness<input id="ct" class="output" type="number" value="0.0008" readonly>mm</li>
+          <li>Power at Tool<input id="pat" class="output" type="number" value="0.04591" readonly>W</li>
+          <li>Power at Motor<input id="pam" class="output" type="number" value="0.04591" readonly>W</li>
+          <li>Tangential Cutting Force<input id="tcf" class="output" type="number" value="1.51511" readonly>N</li>
+          <li>Average Tool Deflection<input id="td" class="output" type="number" value="0.00011" readonly>mm</li>
+          <li>Peak Instantaneous Cutting Force<input id="picf" class="output" type="number" value="0.01" readonly>N</li>
+      </ul>
+      <canvas id="graph" width="360" height="100"></canvas>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    <div class="footer"><span class="small">These calculations are based upon theoretical values and are only intended for planning purposes. Actual results will vary. No responsibility is assumed.</span></div>
+    <script>
+
+        var KEYCODE_SHIFT = 16;
+        var KEYCODE_CTRL = 17;
+        var g_shift = false;
+        var g_ctrl = false;
+        var g_inputsHolder = document.getElementById("inputs");
+        var g_outputsHolder = document.getElementById("outputs");
+        var g_inputsMetricHolder = document.getElementById("inputs_metric");
+        var g_outputsMetricHolder = document.getElementById("outputs_metric");
+        var g_importButton = document.getElementById("file_import");
+        var g_exportButton = document.getElementById("file_export");
+        var g_unitsButton = document.getElementById("units");
+        var g_canvas = document.getElementById('graph');
+        var g_ctx = g_canvas.getContext('2d');
+        var g_metric = false;
+        var g_version = 7;
+        var g_default = "notes=default;uts=45000;td=0.25;nt=2;ha=30;so=1.25;ym=600;wf=1.2;pe=0.75;woc=0.05;doc=0.1;fpt=0.001;cs=1000;";
+        var g_selectList = document.getElementById("select");
+        var g_cutCount = 10;
+        var g_cuts = [];
+
+        function save()
+        {
+            console.log("saving...");
+
+            // write the input values to html attributes so they'll get saved
+            /*for (var i = 0; i < g_inputsHolder.children.length; i++)
+            {
+                var editInput = getNumberInput(g_inputsHolder.children[i]);
+                editInput.setAttribute("value", editInput.value);
+            }
+            for (var i = 0; i < g_inputsMetricHolder.children.length; i++)
+            {
+                var editInput = getNumberInput(g_inputsMetricHolder.children[i]);
+                editInput.setAttribute("value", editInput.value);
+            }*/
+
+            var blob = serializeInputs();
+            var curcut = g_selectList.selectedIndex;
+            console.log("cut" + curcut + " = " + blob);
+            g_cuts[curcut] = blob;
+            updateCutTitles();
+
+            //console.log(g_inputsHolder.innerHTML);
+            //localStorage.setItem("inputs", blob);
+            for (var i = 0; i < g_cuts.length && i < g_cutCount; i++)
+            {
+                localStorage.setItem("cut" + i, g_cuts[i]);
+            }
+            localStorage.setItem("metric", (g_metric ? "true" : "false"));
+            localStorage.setItem("version", g_version);
+        }
+
+        function load()
+        {
+            if (localStorage.getItem("version") == g_version)
+            {
+                console.log("loading...")
+
+                g_metric = (localStorage.getItem("metric") == "true" ? true : false);
+
+                for (var i = 0; i < g_cuts.length && i < g_cutCount; i++)
+                {
+                    var cutname = "cut" + i;
+                    if (localStorage.getItem(cutname))
+                    {
+                        var blob = localStorage.getItem(cutname);
+                        console.log(cutname + " = " + blob);
+                        g_cuts[i] = blob;
+                    }
+                }
+                g_selectList.selectedIndex = 0;
+                selectCut(0);
+                updateCutTitles();
+                updateUnits();
+                recompute();
+            }
+            else
+            {
+                console.log("version mismatch, not loading: " + localStorage.getItem("version") + " because it's not our version " + g_version);
+            }
+        }
+
+        function getNumberInput(listItem)
+        {
+            if (listItem == null)
+                return null;
+
+            //return listItem.querySelector('input.input[type=number]');
+            return listItem.querySelector('input.input');
+        }
+
+        function keyPressHandler(keyEvent)
+        {
+            var KEYCODE_ENTER = 13;
+
+            if (keyEvent.keyCode == KEYCODE_ENTER)
+            {
+            }
+            //else console.log(keyEvent.keyCode);
+        }
+
+        function keyDownHandler(keyEvent)
+        {
+            var KEYCODE_ESC = 27;
+            var KEYCODE_ENTER = 13;
+            var KEYCODE_LEFT = 37;
+            var KEYCODE_UP = 38;
+            var KEYCODE_RIGHT = 39;
+            var KEYCODE_DOWN = 40;
+            var KEYCODE_TAB = 9;
+            var KEYCODE_BACKSPACE = 8;
+            var KEYCODE_DEL = 46;
+
+            if (keyEvent.keyCode == KEYCODE_ESC || keyEvent.keyCode == KEYCODE_ENTER)
+            {
+                console.log("blur");
+                this.blur();
+
+                return false;
+            }
+            else if (keyEvent.keyCode == KEYCODE_UP)
+            {
+                var listItem = this.parentNode;
+                var ul = listItem.parentNode;
+                var sibling = listItem.previousElementSibling;
+                if (sibling != null && listItem != ul.firstElementChild)
+                {
+                    /*if (g_shift)
+                    {
+                        ul.insertBefore(listItem, sibling);
+                        getTextInput(listItem).focus();
+                        listItem.scrollIntoView();
+                    }
+                    else*/
+                    {
+                        getTextInput(sibling).focus();
+                        sibling.scrollIntoView();
+                    }
+                }
+
+                return false;
+            }
+            else if (keyEvent.keyCode == KEYCODE_DOWN)
+            {
+                var listItem = this.parentNode;
+                var ul = listItem.parentNode;
+                var sibling = listItem.nextElementSibling;
+                if (sibling != null && listItem != ul.lastElementChild)
+                {
+                    /*if (g_shift)
+                    {
+                        if (sibling != ul.lastElementChild)
+                        {
+                            ul.insertBefore(listItem, sibling.nextElementSibling);
+                        }
+                        else
+                        {
+                            ul.appendChild(listItem);
+                        }
+
+                        getTextInput(listItem).focus();
+                        listItem.scrollIntoView();
+                    }
+                    else*/
+                    {
+                        getTextInput(sibling).focus();
+                        sibling.scrollIntoView();
+                    }
+                }
+
+                return false;
+            }
+            //else console.log(keyEvent.keyCode);
+        }
+
+        function globalKeyDown(keyEvent)
+        {
+            if (keyEvent.keyCode == KEYCODE_SHIFT)
+            {
+                g_shift = true;
+            }
+            else if (keyEvent.keyCode == KEYCODE_CTRL)
+            {
+                g_ctrl = true;
+            }
+        }
+
+        function globalKeyUp(keyEvent)
+        {
+            if (keyEvent.keyCode == KEYCODE_SHIFT)
+            {
+                g_shift = false;
+            }
+            else if (keyEvent.keyCode == KEYCODE_CTRL)
+            {
+                g_ctrl = false;
+            }
+        }
+
+        function getInput(id, metric_conversion)
+        {
+            if (g_metric)
+                return parseFloat(g_inputsMetricHolder.querySelector('#'+id).value)/metric_conversion;
+            else
+                return parseFloat(g_inputsHolder.querySelector('#'+id).value);
+        }
+
+        function setOutput(id, value, decimals, metric_conversion)
+        {
+            if (g_metric)
+                g_outputsMetricHolder.querySelector('#'+id).value = parseFloat((value*metric_conversion).toFixed(decimals));
+            else
+                g_outputsHolder.querySelector('#'+id).value = parseFloat(value.toFixed(decimals));
+        }
+
+        function saturate(x)
+        {
+            if (x > 1) return 1;
+            if (x < 0) return 0;
+            return x;
+        }
+
+        function lerp(x, y, s)
+        {
+            return x + s * (y - x);
+        }
+
+        function recompute()
+        {
+            /*
+            <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="45000">psi</li>
+            <li>Tool Diameter<input id="td" class="input" type="number" value="0.25">in</li>
+            <li>Number of Teeth<input id="nt" class="input" type="number" value="2"></li>
+            <li>Helix Angle<input id="ha" class="input" type="number" value="30">deg</li>
+            <li>Stick Out<input id="so" class="input" type="number" value="1.25">in</li>
+            <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600">Gpa</li>
+            <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2"></li>
+            <li>Radial Width of Cut<input id="woc" class="input" type="number" value="0.05">in</li>
+            <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="0.1">in</li>
+            <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.001">in/tooth</li>
+            <li>Cutting Speed<input id="cs" class="input" type="number" value="1000">ft/min</li>
+
+            <li>RPM<input id="rpm" class="output" type="number" value="10000">r/min</li>
+            <li>Feed Rate<input id="fr" class="output" type="number" value="10000">in/min</li>
+            <li>Material Removal Rate<input id="mrr" class="output" type="number" value="0.15279">in^3/min</li>
+            <li>Chip Thickness<input id="ct" class="output" type="number" value="0.0008">in</li>
+            <li>Power at Tool<input id="pat" class="output" type="number" value="0.04591">HP</li>
+            <li>Tangential Cutting Force<input id="tcf" class="output" type="number" value="1.51511">lbf</li>
+            <li>Tool Deflection<input id="td" class="output" type="number" value="0.00011">in</li>
+            <li>Peak Instantaneous Cutting Force<input id="picf" class="output" type="number" value="0.012" readonly>lbf</li>*/
+
+            var uts = getInput("uts",0.00689476);
+            var td = getInput("td",25.4);
+            var nt = getInput("nt",1);
+            var ha = getInput("ha",1);
+            var so = getInput("so",25.4);
+            var ym = getInput("ym",1);
+            var wf = getInput("wf",1);
+            var pe = getInput("pe",1);
+            var woc = getInput("woc",25.4);
+            var doc = getInput("doc",25.4);
+            var fpt = getInput("fpt",25.4);
+            var cs = getInput("cs",0.3048);
+
+            var mpc = uts/292207; //derived from aluminum, assuming linear relationship
+            var rpm = 12*cs/(Math.PI*td);
+            var fr = rpm * fpt * nt;
+            var mrr = fr * doc * woc;
+            var eangle = Math.acos(1.0 - woc / (td*0.5)) * (180/Math.PI);
+            var ctangle = Math.min(90, eangle);
+            var ct = fpt*Math.sin(ctangle * Math.PI / 180);
+            var ff = 0.417 * Math.pow(fpt, -0.197);
+            var pat = ff * mpc * wf * mrr;
+            var pam = pat/pe;
+            var tcf = pat * 550 / (cs/60);
+            //var woverd = woc / td;
+            //var efactor = lerp(1.0, 1.1, saturate((woverd - 0.66)/0.34)); // for aluminum...
+            //var tcf = uts * doc * fpt * nt * (eangle/360) * efactor * wf;
+            var def = (tcf * Math.pow(so,3)) / (3 * ym * 145037 * 1.75 * Math.pow(td,4)/64);
+
+            setOutput("rpm",Math.round(rpm),1,1);
+            setOutput("fr",fr,2,25.4);
+            setOutput("mrr",mrr,4,16.387064);
+            setOutput("ct",ct,5,25.4);
+            setOutput("pat",pat,2,745.7);
+            setOutput("pam",pam,2,745.7);
+            setOutput("tcf",tcf,2,4.44822);
+            setOutput("td",def,5,25.4);
+            // note one more setOutput, below
+
+            let forces = [];
+            var k_z_resolution = Math.max(0.001, doc/100);
+            var toolradius = td / 2;
+            var angleStep = 1; // degrees per step
+            var Fcmax = 0;
+            for (var angle = 0; angle < 360; angle += angleStep)
+            {
+                var total = 0;
+
+                for (var tooth = 0; tooth < nt; tooth++)
+                {
+                    var toothStartAngle = angle + 360 * (tooth / nt);
+                    var toothResult = 0;
+
+                    for (var z = doc; z >= 0; z -= k_z_resolution)
+                    {
+                        var toothAngle = toothStartAngle + (180 / Math.PI) * (-z) * Math.tan(ha * (Math.PI / 180)) / toolradius;
+                        toothAngle = toothAngle - 360 * Math.floor(toothAngle / 360); //wrap
+
+                        var engagementAngle = Math.acos(1.0 - woc / toolradius) * (180 / Math.PI);
+                        var engagementStartAngle = 180 - engagementAngle;
+
+                        var chipThickness = 0;
+
+                        if (toothAngle > engagementStartAngle && toothAngle < 180)
+                        {
+                            chipThickness = fpt * Math.sin(toothAngle * (Math.PI / 180));
+                        }
+
+                        var materialRemoved = chipThickness * k_z_resolution * Math.sin(angleStep * Math.PI / 180) * toolradius;
+
+                        toothResult += materialRemoved;
+                    }
+
+                    total += toothResult;
+                }
+
+                var mrr = total*rpm;
+                var feedfactor = 0.417 * Math.pow(fpt, -0.197);
+                var powertool = feedfactor * mpc * wf * mrr;
+                var Fc = powertool * 550 / (cs / 60);
+                Fcmax = Math.max(Fc,Fcmax);
+
+                forces.push(Fc);
+            }
+
+            setOutput("picf",Fcmax*360/angleStep,2,4.44822);
+
+            var height = 100;
+            g_ctx.fillStyle = 'rgb(220, 220, 220)';
+            g_ctx.fillRect(0,0,360,height);
+            g_ctx.beginPath();
+            g_ctx.moveTo(0,height-forces[0]/Fcmax*height);
+            for (var i = 1; i < forces.length; i++)
+            {
+                g_ctx.lineTo(i,height-forces[i]/Fcmax*height);
+            }
+            //console.log("Fc_max: " + Fcmax);
+            //g_ctx.closePath();
+            g_ctx.stroke();
+        }
+    
+        function onblur()
+        {
+            updateNonMetricInputs();
+            recompute();
+            save();
+        }
+
+        function bindTaskEvents(taskListItem)
+        {
+            console.log("bind list item events");
+
+            var editInput = getNumberInput(taskListItem);
+            editInput.onkeypress = keyPressHandler;
+            editInput.onkeydown = keyDownHandler;
+            editInput.onblur = onblur;
+        }
+
+        function exportFile()
+        {
+            save();
+
+            // toggle units twice to mirror settings to both metric & imperial inputs
+            toggleUnits();
+            toggleUnits();
+
+            var filename = "exported_cut.txt";
+            var file = new Blob([serializeInputs()], {type: "text/plain"});
+            if (window.navigator.msSaveOrOpenBlob) // IE10+
+            {
+                window.navigator.msSaveOrOpenBlob(file, filename);
+            }
+            else { // Others
+                var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);  
+                }, 0); 
+            }
+        }
+
+        function importFile()
+        {
+            console.log("import: file chooser...");
+            var fileInput = document.createElement("input");
+            fileInput.id = "file_chooser";
+            fileInput.type = "file";
+            fileInput.click();
+            fileInput.addEventListener('change', importFileInternal, false);
+        }
+
+        function importFileInternal()
+        {
+            var fileInput = this;
+            var files = fileInput.files;
+            var file = files[0];
+            console.log("importing from " + file.name);
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                console.log(event.target.result);
+                deserializeInputs(event.target.result);
+                updateCutTitles();
+                recompute();
+            }
+            reader.readAsText(file);
+        }
+
+        function onCutSelectionChange()
+        {
+            selectCut(this.selectedIndex);
+        }
+
+        function selectCut(index)
+        {
+            //console.log("selecting " + index);
+            deserializeInputs(g_cuts[index]);
+            recompute();
+        }
+
+        function bindAllTaskEvents()
+        {
+            for (var i = 0; i < g_inputsHolder.children.length; i++)
+            {
+                bindTaskEvents(g_inputsHolder.children[i]);
+            }
+            for (var i = 0; i < g_inputsMetricHolder.children.length; i++)
+            {
+                bindTaskEvents(g_inputsMetricHolder.children[i]);
+            }
+            g_selectList.onchange = onCutSelectionChange;
+        }
+
+        function convertInput(id,metric_conversion)
+        {
+            if (g_metric)
+            {
+                var value = parseFloat(g_inputsHolder.querySelector('#'+id).value);
+                g_inputsMetricHolder.querySelector('#'+id).value = parseFloat((value*metric_conversion).toFixed(7));
+            }
+            else
+            {
+                var value = parseFloat(g_inputsMetricHolder.querySelector('#'+id).value);
+                g_inputsHolder.querySelector('#'+id).value = parseFloat((value/metric_conversion).toFixed(7));
+            }
+        }
+
+        function convertText(id)
+        {
+            if (g_metric)
+            {
+                var value = g_inputsHolder.querySelector('#'+id).value;
+                g_inputsMetricHolder.querySelector('#'+id).value = value;
+            }
+            else
+            {
+                var value = g_inputsMetricHolder.querySelector('#'+id).value;
+                g_inputsHolder.querySelector('#'+id).value = value;
+            }
+        }
+
+        function updateNonMetricInputs()
+        {
+            if (g_metric)
+            {
+                g_metric = false;
+
+                convertText("notes");
+                convertInput("uts",0.00689476);
+                convertInput("pe",1);
+                convertInput("td",25.4);
+                convertInput("nt",1);
+                convertInput("ha",1);
+                convertInput("so",25.4);
+                convertInput("ym",1);
+                convertInput("wf",1);
+                convertInput("woc",25.4);
+                convertInput("doc",25.4);
+                convertInput("fpt",25.4);
+                convertInput("cs",0.3048);
+
+                g_metric = true;
+            }
+            else
+            {
+                // already active, so already updated
+            }
+        }
+
+        function updateMetricInputs(force)
+        {
+            if (!g_metric || force)
+            {
+                g_metric = true;
+
+                convertText("notes");
+                convertInput("uts",0.00689476);
+                convertInput("pe",1);
+                convertInput("td",25.4);
+                convertInput("nt",1);
+                convertInput("ha",1);
+                convertInput("so",25.4);
+                convertInput("ym",1);
+                convertInput("wf",1);
+                convertInput("woc",25.4);
+                convertInput("doc",25.4);
+                convertInput("fpt",25.4);
+                convertInput("cs",0.3048);
+
+                g_metric = false;
+            }
+            else
+            {
+                // already active, so already updated
+            }
+        }
+
+        function toggleUnits()
+        {
+            g_metric = !g_metric;
+            updateUnits();
+            convertText("notes");
+            convertInput("uts",0.00689476);
+            convertInput("pe",1);
+            convertInput("td",25.4);
+            convertInput("nt",1);
+            convertInput("ha",1);
+            convertInput("so",25.4);
+            convertInput("ym",1);
+            convertInput("wf",1);
+            convertInput("woc",25.4);
+            convertInput("doc",25.4);
+            convertInput("fpt",25.4);
+            convertInput("cs",0.3048);
+            recompute();
+            save();
+        }
+
+        function updateUnits()
+        {
+            if (g_metric)
+            {
+                g_inputsHolder.style.display = "none";
+                g_outputsHolder.style.display = "none";
+                g_inputsMetricHolder.style.display = "block";
+                g_outputsMetricHolder.style.display = "block";
+            }
+            else
+            {
+                g_inputsHolder.style.display = "block";
+                g_outputsHolder.style.display = "block";
+                g_inputsMetricHolder.style.display = "none";
+                g_outputsMetricHolder.style.display = "none";
+            }
+        }
+
+        function serializeInputs()
+        {
+            var result = "";
+
+            updateNonMetricInputs();
+
+            for (var i = 0; i < g_inputsHolder.children.length; i++)
+            {
+                var node = g_inputsHolder.children[i].querySelector('input');
+                var value = node.value;
+                value = value.replace(";",",");
+                value = value.replace("=","-");
+                result = result + node.id + "=" + value + ";";
+            }
+
+            return result;
+        }
+
+        function deserializeInputs(blob)
+        {
+            var inputs = blob.split(";");
+
+            for (var i = 0; i < inputs.length; i++)
+            {
+                if (inputs[i] != "")
+                {
+                    var assignment = inputs[i].split("=");
+                    var id = assignment[0];
+                    var node = g_inputsHolder.querySelector("#" + id);
+                    if (node == null)
+                    {
+                        console.log("error: can't find #" + id);
+                    }
+                    else
+                    {
+                        node.value = assignment[1];
+                    }
+                }
+            }
+
+            updateMetricInputs(true);
+        }
+
+        function getNotesFromBlob(blob)
+        {
+            var inputs = blob.split(";");
+
+            for (var i = 0; i < inputs.length; i++)
+            {
+                if (inputs[i] != "")
+                {
+                    var assignment = inputs[i].split("=");
+                    var id = assignment[0];
+                    if (id == "notes")
+                    {
+                        return assignment[1];
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        function setupCuts()
+        {
+            for (var i = 0; i < g_cutCount; i++)
+            {
+                g_cuts[i] = g_default;
+            }
+        }
+
+        function updateCutTitles()
+        {
+            for (var i = 0; i < g_selectList.children.length; i++)
+            {
+                var child = g_selectList.children[i];
+                child.innerText = i + ": " + getNotesFromBlob(g_cuts[i]);
+            }
+        }
+
+        function initialize()
+        {
+            setupCuts();
+
+            load();
+
+            //document.onkeydown = globalKeyDown;
+            //document.onkeyup = globalKeyUp;
+
+            g_importButton.onclick = importFile;
+            g_exportButton.onclick = exportFile;
+            g_unitsButton.onclick = toggleUnits;
+
+            bindAllTaskEvents();
+
+            updateCutTitles();
+            g_selectList.selectedIndex = 0;
+            selectCut(0);
+
+            updateUnits();
+
+            recompute();
+        }
+
+        initialize();
+
+    </script>
+  </body>
+</html>
+
