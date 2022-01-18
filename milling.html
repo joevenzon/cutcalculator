@@ -109,33 +109,33 @@
     <td>
       <ul id="inputs">
           <li>Name<input id="notes" class="input" type="text" value="default"></li>
-          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="45000">psi</li>
-          <li>Tool Diameter<input id="td" class="input" type="number" value="0.25">in</li>
-          <li>Number of Teeth<input id="nt" class="input" type="number" value="2"></li>
-          <li>Helix Angle<input id="ha" class="input" type="number" value="30">deg</li>
-          <li>Stick Out<input id="so" class="input" type="number" value="1.25">in</li>
-          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600">Gpa</li>
-          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2"></li>
-          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75"></li>
-          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="0.05">in</li>
-          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="0.1">in</li>
-          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.001">in/tooth</li>
-          <li>Cutting Speed<input id="cs" class="input" type="number" value="1000">ft/min</li>
+          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="45000" step="100">psi</li>
+          <li>Tool Diameter<input id="td" class="input" type="number" value="0.25" step="0.05" min="0">in</li>
+          <li>Number of Teeth<input id="nt" class="input" type="number" value="2" step="1" min="1"></li>
+          <li>Helix Angle<input id="ha" class="input" type="number" value="30" step="5" min="0">deg</li>
+          <li>Stick Out<input id="so" class="input" type="number" value="1.25" step=".05" min="0">in</li>
+          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600" step="50" min="0">Gpa</li>
+          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2" step="0.05" min="0"></li>
+          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75" step="0.05" min="0"></li>
+          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="0.05" step="0.01" min="0">in</li>
+          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="0.1" step="0.05" min="0">in</li>
+          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.001" step="0.0005" min="0">in/tooth</li>
+          <li>Cutting Speed<input id="cs" class="input" type="number" value="1000" step="50" min="0">ft/min</li>
       </ul>
       <ul id="inputs_metric">
           <li>Name<input id="notes" class="input" type="text" value="default"></li>
-          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="310">MPa</li>
-          <li>Tool Diameter<input id="td" class="input" type="number" value="6.25">mm</li>
-          <li>Number of Teeth<input id="nt" class="input" type="number" value="2"></li>
-          <li>Helix Angle<input id="ha" class="input" type="number" value="30">deg</li>
-          <li>Stick Out<input id="so" class="input" type="number" value="30">mm</li>
-          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600">Gpa</li>
-          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2"></li>
-          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75"></li>
-          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="1.2">mm</li>
-          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="2.5">mm</li>
-          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.025">mm/tooth</li>
-          <li>Cutting Speed<input id="cs" class="input" type="number" value="300">m/min</li>
+          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="310" step="5" min="0">MPa</li>
+          <li>Tool Diameter<input id="td" class="input" type="number" value="6.25" step=".05" min="0">mm</li>
+          <li>Number of Teeth<input id="nt" class="input" type="number" value="2" step="1" min="1"></li>
+          <li>Helix Angle<input id="ha" class="input" type="number" value="30" step="5" min="0">deg</li>
+          <li>Stick Out<input id="so" class="input" type="number" value="30" step="0.5" min="0">mm</li>
+          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600" step="50" min="0">Gpa</li>
+          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2" step="0.05" min="0"></li>
+          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75" step="0.05" min="0"></li>
+          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="1.2" step="0.1" min="0">mm</li>
+          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="2.5" step="0.1" min="0">mm</li>
+          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.025" step="0.005" min="0">mm/tooth</li>
+          <li>Cutting Speed<input id="cs" class="input" type="number" value="300" step="50" min="0">m/min</li>
       </ul>
       <div class="container">
         <button id="file_import">Import</button>
@@ -848,6 +848,19 @@
             updateUnits();
 
             recompute();
+
+            uts.onchange = recompute;
+            td.onchange = recompute;
+            nt.onchange = recompute;
+            ha.onchange = recompute;
+            so.onchange = recompute;
+            ym.onchange = recompute;
+            wf.onchange = recompute;
+            pe.onchange = recompute;
+            woc.onchange = recompute;
+            doc.onchange = recompute;
+            fpt.onchange = recompute;
+            cs.onchange = recompute;
         }
 
         initialize();
