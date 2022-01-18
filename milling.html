@@ -627,12 +627,13 @@
             if (g_metric)
             {
                 var value = parseFloat(g_inputsHolder.querySelector('#'+id).value);
-                g_inputsMetricHolder.querySelector('#'+id).value = parseFloat((value*metric_conversion).toFixed(7));
+                g_inputsMetricHolder.querySelector('#'+id).value = parseFloat((value*metric_conversion).toPrecision(7));
             }
             else
             {
                 var value = parseFloat(g_inputsMetricHolder.querySelector('#'+id).value);
-                g_inputsHolder.querySelector('#'+id).value = parseFloat((value/metric_conversion).toFixed(7));
+                // Higher precision for (non-clean) division helps round trip round values.
+                g_inputsHolder.querySelector('#'+id).value = parseFloat((value/metric_conversion).toPrecision(8));
             }
         }
 
