@@ -541,6 +541,7 @@
             editInput.onkeypress = keyPressHandler;
             editInput.onkeydown = keyDownHandler;
             editInput.onblur = onblur;
+            editInput.onchange = onblur;
         }
 
         function exportFile()
@@ -848,19 +849,6 @@
             updateUnits();
 
             recompute();
-
-            uts.onchange = recompute;
-            td.onchange = recompute;
-            nt.onchange = recompute;
-            ha.onchange = recompute;
-            so.onchange = recompute;
-            ym.onchange = recompute;
-            wf.onchange = recompute;
-            pe.onchange = recompute;
-            woc.onchange = recompute;
-            doc.onchange = recompute;
-            fpt.onchange = recompute;
-            cs.onchange = recompute;
         }
 
         initialize();
