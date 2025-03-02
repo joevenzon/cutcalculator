@@ -1,178 +1,619 @@
-<html>
-  <head>
-    <title>Online Milling Calculator</title>
-    <style>
-        body {
-          background: #fff;
-          color: #333;
-          font-family: Lato, sans-serif;
-        }
-        .container {
-          display: block;
-          width: auto;
-          margin: 10px 10px;
-          /*border-top: 2px solid #333;*/
-        }
-        .heading {
-          display: block;
-          width: auto;
-          margin: 10px 10px;
-          border-bottom: 2px solid #333;
-        }
-        .footer {
-          display: block;
-          width: auto;
-          margin: 10px 10px;
-          padding: 10px;
-          border-top: 2px solid #333;
-        }
-        ul {
-          margin: 0;
-          padding: 0;
-        }
-        li * {
-          /*float: left;*/
-        }
-        li, h3 {
-          clear:both;
-          list-style:none;
-          margin:10px;
-          /*text-align:right;*/
-        }
-        input {
-          margin: 0px;
-          margin-left: 10px;
-          margin-right: 10px;
-          width: 100px;
-        }
-        input#notes {
-          width: 300px;
-        }
-        input.output {
-          /*border: none;*/
-          background: #eeeeee;
-        }
-        h3 {
-          color: #333;
-          font-weight: 700;
-          font-size: 15px;
-          /*border-bottom: 2px solid #333;*/
-          padding: 30px 0 2px;
-          margin: 0;
-          text-transform: uppercase;
-        }
-        li {
-          overflow: hidden;
-          /*padding: 0px;*/
-          /*margin-top: 10px;*/
-          /*border-top: 1px solid #eee;*/
-        }
-        table td, table td * {
-            vertical-align: top;
-        }
-        select {
-          width: 200px;
-          padding: 5px 5px;
-          border: none;
-          border-radius: 4px;
-          background-color: #f1f1f1;
-          overflow-y: auto;
-        }
-        span.small {
-          color: #999;
-          font-size: smaller;
-        }
-    </style>
-  </head>
-  <body>
-      <div class="heading">
-          Online Milling Calculator
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Milling Calculator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-color: #ecf0f1;
+      --dark-color: #34495e;
+      --success-color: #2ecc71;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f7fa;
+      padding: 20px;
+    }
+
+    .main-container {
+      max-width: 1600px; /* Set your desired max-width */
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .header {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--box-shadow);
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    
+    .calculator-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: stretch;
+    }
+    
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card:hover {
+      /*transform: translateY(-5px);*/
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cut-selection {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .inputs {
+      flex: 2;
+      min-width: 300px;
+      max-width: 600px;
+    }
+    
+    .outputs {
+      flex: 2;
+      min-width: 300px;
+      max-width: 600px;
+    }
+    
+    h3 {
+      color: var(--secondary-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--light-color);
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      background-color: white;
+      /* Increased height to eliminate scrollbar for 10 options */
+      height: 400px;
+      margin-bottom: 15px;
+      flex-grow: 1;
+    }
+    
+    select option {
+      padding: 8px;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    select option:hover {
+      background-color: var(--light-color);
+    }
+    
+    .input-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    
+    .input-group label {
+      flex: 1;
+      margin-right: 10px;
+      font-weight: 500;
+    }
+    
+    .input-group input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+    
+    .input-group input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    .input-group .unit {
+      margin-left: 8px;
+      color: #666;
+      font-size: 13px;
+      min-width: 60px;
+    }
+    
+    /* Add this new rule to create a placeholder for fields without units */
+    .input-group .no-unit {
+      margin-left: 8px;
+      min-width: 60px;
+      visibility: hidden;
+    }
+    
+    #notes {
+      width: 100%;
+    }
+    
+    .output-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    
+    .output-group label {
+      flex: 1.5;
+      margin-right: 10px;
+      font-weight: 500;
+    }
+    
+    .output-group input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      background-color: #f8f9fa;
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+    
+    .output-group .unit {
+      margin-left: 8px;
+      color: #666;
+      font-size: 13px;
+      min-width: 60px;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+    
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn i {
+      margin-right: 8px;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+    
+    .btn-secondary {
+      background-color: var(--light-color);
+      color: var(--dark-color);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #bdc3c7;
+    }
+    
+    canvas {
+      width: 100%;
+      height: 150px;
+      background-color: #f8f9fa;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+      border: 1px solid #ddd;
+    }
+    
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Toggle for units */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .units-toggle {
+      display: flex;
+      align-items: center;
+      background-color: var(--light-color);
+      border-radius: 50px;
+      padding: 4px;
+      cursor: pointer;
+    }
+    
+    .units-toggle span {
+      padding: 6px 12px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .units-toggle .active {
+      background-color: white;
+      box-shadow: var(--box-shadow);
+      color: var(--primary-color);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .calculator-container {
+        flex-direction: column;
+      }
+      
+      .card {
+        width: 100%;
+      }
+      
+      /* Make select still take good vertical space on mobile */
+      select {
+        height: 350px;
+      }
+      
+      .input-group, .output-group {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .input-group label, .output-group label {
+        margin-bottom: 6px;
+      }
+      
+      .input-group input, .output-group input {
+        width: 100%;
+      }
+      
+      .input-group .unit, .input-group .no-unit, .output-group .unit {
+        position: absolute;
+        right: 10px;
+        top: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <div class="header">
+    <h1><i class="fas fa-cogs"></i> Online Milling Calculator</h1>
+    <div class="units-toggle" id="units-toggle">
+      <span class="active" id="imperial">Imperial</span>
+      <span id="metric">Metric</span>
+    </div>
+  </div>
+  
+  <div class="calculator-container">
+    <div class="card cut-selection">
+      <h3>Cut Selection</h3>
+      <select id="select" size="10">
+        <option value="0">0: Default Cut</option>
+        <option value="1">1: Custom Cut 1</option>
+        <option value="2">2: Custom Cut 2</option>
+        <option value="3">3: Custom Cut 3</option>
+        <option value="4">4: Custom Cut 4</option>
+        <option value="5">5: Custom Cut 5</option>
+        <option value="6">6: Custom Cut 6</option>
+        <option value="7">7: Custom Cut 7</option>
+        <option value="8">8: Custom Cut 8</option>
+        <option value="9">9: Custom Cut 9</option>
+      </select>
+      <div class="btn-group">
+        <button id="file_import" class="btn btn-secondary"><i class="fas fa-file-import"></i> Import</button>
+        <button id="file_export" class="btn btn-secondary"><i class="fas fa-file-export"></i> Export</button>
       </div>
-    <table>
-    <tbody>
-    <tr>
-    <td>
-        <h3>Cut selection</h3>
-        <select id="select" size="10">
-            <option value="0">0:</option>
-            <option value="1">1:</option>
-            <option value="2">2:</option>
-            <option value="3">3:</option>
-            <option value="4">4:</option>
-            <option value="5">5:</option>
-            <option value="6">6:</option>
-            <option value="7">7:</option>
-            <option value="8">8:</option>
-            <option value="9">9:</option>
-        </select>
-    </td>
-    <td>
-      <ul id="inputs">
-          <li>Name<input id="notes" class="input" type="text" value="default"></li>
-          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="45000" step="100">psi</li>
-          <li>Tool Diameter<input id="td" class="input" type="number" value="0.25" step="0.05" min="0">in</li>
-          <li>Number of Teeth<input id="nt" class="input" type="number" value="2" step="1" min="1"></li>
-          <li>Helix Angle<input id="ha" class="input" type="number" value="30" step="5" min="0">deg</li>
-          <li>Stick Out<input id="so" class="input" type="number" value="1.25" step=".05" min="0">in</li>
-          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600" step="50" min="0">Gpa</li>
-          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2" step="0.05" min="0"></li>
-          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75" step="0.05" min="0"></li>
-          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="0.05" step="0.01" min="0">in</li>
-          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="0.1" step="0.05" min="0">in</li>
-          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.001" step="0.0005" min="0">in/tooth</li>
-          <li>Cutting Speed<input id="cs" class="input" type="number" value="1000" step="50" min="0">ft/min</li>
-      </ul>
-      <ul id="inputs_metric">
-          <li>Name<input id="notes" class="input" type="text" value="default"></li>
-          <li>Ultimate Tensile Strength<input id="uts" class="input" type="number" value="310" step="5" min="0">MPa</li>
-          <li>Tool Diameter<input id="td" class="input" type="number" value="6.25" step=".05" min="0">mm</li>
-          <li>Number of Teeth<input id="nt" class="input" type="number" value="2" step="1" min="1"></li>
-          <li>Helix Angle<input id="ha" class="input" type="number" value="30" step="5" min="0">deg</li>
-          <li>Stick Out<input id="so" class="input" type="number" value="30" step="0.5" min="0">mm</li>
-          <li>Tool Youngs Modulus<input id="ym" class="input" type="number" value="600" step="50" min="0">Gpa</li>
-          <li>Tool Wear Factor<input id="wf" class="input" type="number" value="1.2" step="0.05" min="0"></li>
-          <li>Power Efficiency<input id="pe" class="input" type="number" value="0.75" step="0.05" min="0"></li>
-          <li>Radial Width of Cut<input id="woc" class="input" type="number" value="1.2" step="0.1" min="0">mm</li>
-          <li>Axial Depth of Cut<input id="doc" class="input" type="number" value="2.5" step="0.1" min="0">mm</li>
-          <li>Feed Per Tooth<input id="fpt" class="input" type="number" value="0.025" step="0.005" min="0">mm/tooth</li>
-          <li>Cutting Speed<input id="cs" class="input" type="number" value="300" step="50" min="0">m/min</li>
-      </ul>
-      <div class="container">
-        <button id="file_import">Import</button>
-        <button id="file_export">Export</button>
-        <button id="units">Switch Units</button>
+    </div>
+    
+    <div class="card inputs">
+      <h3>Input Parameters</h3>
+      <div id="inputs" class="input-fields">
+        <div class="input-group">
+          <label for="notes">Name</label>
+          <input id="notes" class="input" type="text" value="default">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="uts">Ultimate Tensile Strength</label>
+          <input id="uts" class="input" type="number" value="45000" step="100">
+          <span class="unit">psi</span>
+        </div>
+        <div class="input-group">
+          <label for="td">Tool Diameter</label>
+          <input id="td" class="input" type="number" value="0.25" step="0.05" min="0">
+          <span class="unit">in</span>
+        </div>
+        <div class="input-group">
+          <label for="nt">Number of Teeth</label>
+          <input id="nt" class="input" type="number" value="2" step="1" min="1">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="ha">Helix Angle</label>
+          <input id="ha" class="input" type="number" value="30" step="5" min="0">
+          <span class="unit">deg</span>
+        </div>
+        <div class="input-group">
+          <label for="so">Stick Out</label>
+          <input id="so" class="input" type="number" value="1.25" step=".05" min="0">
+          <span class="unit">in</span>
+        </div>
+        <div class="input-group">
+          <label for="ym">Tool Youngs Modulus</label>
+          <input id="ym" class="input" type="number" value="600" step="50" min="0">
+          <span class="unit">Gpa</span>
+        </div>
+        <div class="input-group">
+          <label for="wf">Tool Wear Factor</label>
+          <input id="wf" class="input" type="number" value="1.2" step="0.05" min="0">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="pe">Power Efficiency</label>
+          <input id="pe" class="input" type="number" value="0.75" step="0.05" min="0">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="woc">Radial Width of Cut</label>
+          <input id="woc" class="input" type="number" value="0.05" step="0.01" min="0">
+          <span class="unit">in</span>
+        </div>
+        <div class="input-group">
+          <label for="doc">Axial Depth of Cut</label>
+          <input id="doc" class="input" type="number" value="0.1" step="0.05" min="0">
+          <span class="unit">in</span>
+        </div>
+        <div class="input-group">
+          <label for="fpt">Feed Per Tooth</label>
+          <input id="fpt" class="input" type="number" value="0.001" step="0.0005" min="0">
+          <span class="unit">in/tooth</span>
+        </div>
+        <div class="input-group">
+          <label for="cs">Cutting Speed</label>
+          <input id="cs" class="input" type="number" value="1000" step="50" min="0">
+          <span class="unit">ft/min</span>
+        </div>
       </div>
-    </td>
-    <td>
-      <ul id="outputs">
-          <li>RPM<input id="rpm" class="output" type="number" value="10000" readonly>r/min</li>
-          <li>Feed Rate<input id="fr" class="output" type="number" value="10000" readonly>in/min</li>
-          <li>Material Removal Rate<input id="mrr" class="output" type="number" value="0.15279" readonly>in^3/min</li>
-          <li>Chip Thickness<input id="ct" class="output" type="number" value="0.0008" readonly>in</li>
-          <li>Power at Tool<input id="pat" class="output" type="number" value="0.04591" readonly>HP</li>
-          <li>Power at Motor<input id="pam" class="output" type="number" value="0.04591" readonly>HP</li>
-          <li>Tangential Cutting Force<input id="tcf" class="output" type="number" value="1.51511" readonly>lbf</li>
-          <li>Average Tool Deflection<input id="td" class="output" type="number" value="0.00011" readonly>in</li>
-          <li>Peak Instantaneous Cutting Force<input id="picf" class="output" type="number" value="0.012" readonly>lbf</li>
-      </ul>
-      <ul id="outputs_metric">
-          <li>RPM<input id="rpm" class="output" type="number" value="10000" readonly>r/min</li>
-          <li>Feed Rate<input id="fr" class="output" type="number" value="10000" readonly>mm/min</li>
-          <li>Material Removal Rate<input id="mrr" class="output" type="number" value="0.15279" readonly>cm^3/min</li>
-          <li>Chip Thickness<input id="ct" class="output" type="number" value="0.0008" readonly>mm</li>
-          <li>Power at Tool<input id="pat" class="output" type="number" value="0.04591" readonly>W</li>
-          <li>Power at Motor<input id="pam" class="output" type="number" value="0.04591" readonly>W</li>
-          <li>Tangential Cutting Force<input id="tcf" class="output" type="number" value="1.51511" readonly>N</li>
-          <li>Average Tool Deflection<input id="td" class="output" type="number" value="0.00011" readonly>mm</li>
-          <li>Peak Instantaneous Cutting Force<input id="picf" class="output" type="number" value="0.01" readonly>N</li>
-      </ul>
+      
+      <div id="inputs_metric" class="input-fields" style="display: none;">
+        <div class="input-group">
+          <label for="notes">Name</label>
+          <input id="notes" class="input" type="text" value="default">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="uts">Ultimate Tensile Strength</label>
+          <input id="uts" class="input" type="number" value="310" step="5" min="0">
+          <span class="unit">MPa</span>
+        </div>
+        <div class="input-group">
+          <label for="td">Tool Diameter</label>
+          <input id="td" class="input" type="number" value="6.25" step=".05" min="0">
+          <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+          <label for="nt">Number of Teeth</label>
+          <input id="nt" class="input" type="number" value="2" step="1" min="1">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="ha">Helix Angle</label>
+          <input id="ha" class="input" type="number" value="30" step="5" min="0">
+          <span class="unit">deg</span>
+        </div>
+        <div class="input-group">
+          <label for="so">Stick Out</label>
+          <input id="so" class="input" type="number" value="30" step="0.5" min="0">
+          <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+          <label for="ym">Tool Youngs Modulus</label>
+          <input id="ym" class="input" type="number" value="600" step="50" min="0">
+          <span class="unit">Gpa</span>
+        </div>
+        <div class="input-group">
+          <label for="wf">Tool Wear Factor</label>
+          <input id="wf" class="input" type="number" value="1.2" step="0.05" min="0">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="pe">Power Efficiency</label>
+          <input id="pe" class="input" type="number" value="0.75" step="0.05" min="0">
+          <span class="no-unit"></span>
+        </div>
+        <div class="input-group">
+          <label for="woc">Radial Width of Cut</label>
+          <input id="woc" class="input" type="number" value="1.2" step="0.1" min="0">
+          <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+          <label for="doc">Axial Depth of Cut</label>
+          <input id="doc" class="input" type="number" value="2.5" step="0.1" min="0">
+          <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+          <label for="fpt">Feed Per Tooth</label>
+          <input id="fpt" class="input" type="number" value="0.025" step="0.005" min="0">
+          <span class="unit">mm/tooth</span>
+        </div>
+        <div class="input-group">
+          <label for="cs">Cutting Speed</label>
+          <input id="cs" class="input" type="number" value="300" step="50" min="0">
+          <span class="unit">m/min</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card outputs">
+      <h3>Results</h3>
+      <div id="outputs" class="output-fields">
+        <div class="output-group">
+          <label for="rpm">RPM</label>
+          <input id="rpm" class="output" type="number" value="10000" readonly>
+          <span class="unit">r/min</span>
+        </div>
+        <div class="output-group">
+          <label for="fr">Feed Rate</label>
+          <input id="fr" class="output" type="number" value="10000" readonly>
+          <span class="unit">in/min</span>
+        </div>
+        <div class="output-group">
+          <label for="mrr">Material Removal Rate</label>
+          <input id="mrr" class="output" type="number" value="0.15279" readonly>
+          <span class="unit">in<sup>3</sup>/min</span>
+        </div>
+        <div class="output-group">
+          <label for="ct">Chip Thickness</label>
+          <input id="ct" class="output" type="number" value="0.0008" readonly>
+          <span class="unit">in</span>
+        </div>
+        <div class="output-group">
+          <label for="pat">Power at Tool</label>
+          <input id="pat" class="output" type="number" value="0.04591" readonly>
+          <span class="unit">HP</span>
+        </div>
+        <div class="output-group">
+          <label for="pam">Power at Motor</label>
+          <input id="pam" class="output" type="number" value="0.04591" readonly>
+          <span class="unit">HP</span>
+        </div>
+        <div class="output-group">
+          <label for="tcf">Tangential Cutting Force</label>
+          <input id="tcf" class="output" type="number" value="1.51511" readonly>
+          <span class="unit">lbf</span>
+        </div>
+        <div class="output-group">
+          <label for="td">Average Tool Deflection</label>
+          <input id="td" class="output" type="number" value="0.00011" readonly>
+          <span class="unit">in</span>
+        </div>
+        <div class="output-group">
+          <label for="picf">Peak Instantaneous Cutting Force</label>
+          <input id="picf" class="output" type="number" value="0.012" readonly>
+          <span class="unit">lbf</span>
+        </div>
+      </div>
+      
+      <div id="outputs_metric" class="output-fields" style="display: none;">
+        <div class="output-group">
+          <label for="rpm">RPM</label>
+          <input id="rpm" class="output" type="number" value="10000" readonly>
+          <span class="unit">r/min</span>
+        </div>
+        <div class="output-group">
+          <label for="fr">Feed Rate</label>
+          <input id="fr" class="output" type="number" value="10000" readonly>
+          <span class="unit">mm/min</span>
+        </div>
+        <div class="output-group">
+          <label for="mrr">Material Removal Rate</label>
+          <input id="mrr" class="output" type="number" value="0.15279" readonly>
+          <span class="unit">cm<sup>3</sup>/min</span>
+        </div>
+        <div class="output-group">
+          <label for="ct">Chip Thickness</label>
+          <input id="ct" class="output" type="number" value="0.0008" readonly>
+          <span class="unit">mm</span>
+        </div>
+        <div class="output-group">
+          <label for="pat">Power at Tool</label>
+          <input id="pat" class="output" type="number" value="0.04591" readonly>
+          <span class="unit">W</span>
+        </div>
+        <div class="output-group">
+          <label for="pam">Power at Motor</label>
+          <input id="pam" class="output" type="number" value="0.04591" readonly>
+          <span class="unit">W</span>
+        </div>
+        <div class="output-group">
+          <label for="tcf">Tangential Cutting Force</label>
+          <input id="tcf" class="output" type="number" value="1.51511" readonly>
+          <span class="unit">N</span>
+        </div>
+        <div class="output-group">
+          <label for="td">Average Tool Deflection</label>
+          <input id="td" class="output" type="number" value="0.00011" readonly>
+          <span class="unit">mm</span>
+        </div>
+        <div class="output-group">
+          <label for="picf">Peak Instantaneous Cutting Force</label>
+          <input id="picf" class="output" type="number" value="0.01" readonly>
+          <span class="unit">N</span>
+        </div>
+      </div>
+      
       <canvas id="graph" width="360" height="100"></canvas>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    <div class="footer"><span class="small">These calculations are based upon theoretical values and are only intended for planning purposes. Actual results will vary. No responsibility is assumed. <a href="https://github.com/joevenzon/cutcalculator">(source)</a></span></div>
-    <script>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>These calculations are based upon theoretical values and are only intended for planning purposes. Actual results will vary. No responsibility is assumed. <a href="https://github.com/joevenzon/cutcalculator">(source)</a></p>
+  </div>
+
+</div>
+  
+  <script>
 
         var KEYCODE_SHIFT = 16;
         var KEYCODE_CTRL = 17;
@@ -184,7 +625,7 @@
         var g_outputsMetricHolder = document.getElementById("outputs_metric");
         var g_importButton = document.getElementById("file_import");
         var g_exportButton = document.getElementById("file_export");
-        var g_unitsButton = document.getElementById("units");
+        var g_unitsButton = document.getElementById("units-toggle");
         var g_canvas = document.getElementById('graph');
         var g_ctx = g_canvas.getContext('2d');
         var g_metric = false;
@@ -727,12 +1168,18 @@
             convertInput("cs",0.3048);
             recompute();
             save();
+            console.log("toggled units");
         }
 
         function updateUnits()
         {
+            // Remove active class from all spans
+            const spans = g_unitsButton.querySelectorAll('span');
+            spans.forEach(span => span.classList.remove('active'));
+
             if (g_metric)
             {
+                g_unitsButton.querySelector('#metric').classList.add('active');
                 g_inputsHolder.style.display = "none";
                 g_outputsHolder.style.display = "none";
                 g_inputsMetricHolder.style.display = "block";
@@ -740,6 +1187,7 @@
             }
             else
             {
+                g_unitsButton.querySelector('#imperial').classList.add('active');
                 g_inputsHolder.style.display = "block";
                 g_outputsHolder.style.display = "block";
                 g_inputsMetricHolder.style.display = "none";
